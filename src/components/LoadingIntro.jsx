@@ -2,11 +2,27 @@ import { Suspense, useMemo, useRef } from 'react'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { motion } from 'framer-motion'
+import { ACESFilmicToneMapping, SRGBColorSpace } from 'three'
 
 function LoadingModel() {
   const gltf = useLoader(GLTFLoader, '/assets/3Dguitar.glb')
   const groupRef = useRef()
-  const model = useMemo(() => gltf.scene.clone(), [gltf])
+  const model = useMemo(() => {
+    const scene = gltf.scene.clone()
+    scene.traverse((node) => {
+      if (!node.isMesh || !node.material) return
+
+      const materials = Array.isArray(node.material) ? node.material : [node.material]
+      materials.forEach((material) => {
+        if (material.map) {
+          material.map.colorSpace = SRGBColorSpace
+          material.map.needsUpdate = true
+        }
+        material.needsUpdate = true
+      })
+    })
+    return scene
+  }, [gltf])
 
   useFrame((state) => {
     if (!groupRef.current) return
@@ -40,6 +56,11 @@ export default function LoadingIntro() {
             dpr={[1, 1.2]}
             camera={{ position: [0, 0.45, 8.9], fov: 24 }}
             gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
+            onCreated={({ gl }) => {
+              gl.outputColorSpace = SRGBColorSpace
+              gl.toneMapping = ACESFilmicToneMapping
+              gl.toneMappingExposure = 1.08
+            }}
           >
             <ambientLight intensity={1.15} />
             <directionalLight position={[4, 5, 4]} intensity={2.25} color="#ffe8bf" />
