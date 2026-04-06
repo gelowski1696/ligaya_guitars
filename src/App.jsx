@@ -3,18 +3,18 @@ import { useReducedMotion } from 'framer-motion'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Story from './components/Story'
+import Films from './components/Films'
 import Guitars from './components/Guitars'
 import Craftsmanship from './components/Craftsmanship'
 import Gallery from './components/Gallery'
 import TrustSection from './components/TrustSection'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
-import ScrollToTopButton from './components/ScrollToTopButton'
-import LoadingIntroLite from './components/LoadingIntroLite'
 import useMediaQuery from './hooks/useMediaQuery'
 import Seo from './components/Seo'
 
 const LoadingIntro = lazy(() => import('./components/LoadingIntro'))
+const LoadingIntroLite = lazy(() => import('./components/LoadingIntroLite'))
 
 export default function App() {
   const [showIntro, setShowIntro] = useState(true)
@@ -37,7 +37,9 @@ export default function App() {
             <LoadingIntro />
           </Suspense>
         ) : (
-          <LoadingIntroLite />
+          <Suspense fallback={null}>
+            <LoadingIntroLite />
+          </Suspense>
         )
       )}
 
@@ -47,6 +49,7 @@ export default function App() {
       <main className="relative z-10">
         <Hero />
         <Story />
+        <Films />
         <Guitars />
         <Craftsmanship />
         <Gallery />
@@ -54,7 +57,6 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
-      <ScrollToTopButton />
     </div>
   )
 }

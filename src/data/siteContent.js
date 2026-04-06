@@ -1,6 +1,7 @@
 export const navigationLinks = [
   { label: 'Home', href: '#home' },
   { label: 'Story', href: '#story' },
+  { label: 'Films', href: '#films' },
   { label: 'Guitars', href: '#guitars' },
   { label: 'Craft', href: '#craftsmanship' },
   { label: 'Gallery', href: '#gallery' },
@@ -101,6 +102,23 @@ export const storyPoints = [
   {
     title: 'Sold where customers already shop',
     body: 'The buying path stays simple through Ligaya storefronts and social channels, with shipping and returns handled through familiar platforms.',
+  },
+]
+
+export const brandFilms = [
+  {
+    label: 'Brand film',
+    title: 'A Collaboration of Filipino Guitar Builders',
+    body: 'A wider look at the people, atmosphere, and shared craft behind the instruments.',
+    src: '/assets/video/A%20Collaboration%20of%20Filipino%20Guitar%20Builders..mp4',
+    accent: 'Craft stories, workshop energy, and a more human first impression.',
+  },
+  {
+    label: 'Studio note',
+    title: 'Lightning Kid, explained by the designer',
+    body: 'A more focused video moment that brings design intent and product thinking into the page.',
+    src: '/assets/video/Lightning%20Kid%20-%20explained%20by%20the%20designer..mp4',
+    accent: 'A tighter feature that adds credibility and personality without cluttering the layout.',
   },
 ]
 
