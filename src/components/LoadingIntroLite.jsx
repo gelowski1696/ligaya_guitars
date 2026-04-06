@@ -2,27 +2,35 @@ import { Suspense, useMemo, useRef } from 'react'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { motion } from 'framer-motion'
-import { ACESFilmicToneMapping, SRGBColorSpace } from 'three'
+import {
+  ACESFilmicToneMapping,
+  DoubleSide,
+  MeshStandardMaterial,
+  SRGBColorSpace,
+  TextureLoader,
+} from 'three'
 
 function LiteLoadingModel() {
   const gltf = useLoader(GLTFLoader, '/assets/3Dguitar.glb')
+  const baseColorTexture = useLoader(TextureLoader, '/assets/3Dguitar_baseColor.jpg')
   const groupRef = useRef()
   const model = useMemo(() => {
+    baseColorTexture.colorSpace = SRGBColorSpace
+    baseColorTexture.needsUpdate = true
+
     const scene = gltf.scene.clone()
     scene.traverse((node) => {
       if (!node.isMesh || !node.material) return
-
-      const materials = Array.isArray(node.material) ? node.material : [node.material]
-      materials.forEach((material) => {
-        if (material.map) {
-          material.map.colorSpace = SRGBColorSpace
-          material.map.needsUpdate = true
-        }
-        material.needsUpdate = true
+      node.material = new MeshStandardMaterial({
+        map: baseColorTexture,
+        metalness: 0.2,
+        roughness: 0.62,
+        side: DoubleSide,
       })
+      node.material.needsUpdate = true
     })
     return scene
-  }, [gltf])
+  }, [baseColorTexture, gltf])
 
   useFrame((state) => {
     if (!groupRef.current) return
@@ -43,6 +51,7 @@ function LiteLoadingModel() {
 }
 
 useLoader.preload(GLTFLoader, '/assets/3Dguitar.glb')
+useLoader.preload(TextureLoader, '/assets/3Dguitar_baseColor.jpg')
 
 export default function LoadingIntroLite() {
   return (
