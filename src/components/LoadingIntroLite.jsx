@@ -16,6 +16,7 @@ function LiteLoadingModel() {
   const groupRef = useRef()
   const model = useMemo(() => {
     baseColorTexture.colorSpace = SRGBColorSpace
+    baseColorTexture.flipY = false
     baseColorTexture.needsUpdate = true
 
     const scene = gltf.scene.clone()
